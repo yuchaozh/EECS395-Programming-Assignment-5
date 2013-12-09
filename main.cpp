@@ -15,6 +15,7 @@ Implementation of the word ladder
 #include <queue>
 
 #include "map.h"
+#include "priorityQueue.h"
 
 using namespace std;
 
@@ -29,7 +30,6 @@ int getIndex(string str)
 {
 	bool find = false;
 	int index = 0;
-	//cout<<total<<endl;
 	for (; index < total; index++)
 	{
 		if (allWords[index] == str)
@@ -38,7 +38,6 @@ int getIndex(string str)
 			break;
 		}
 	}
-	//cout<<"the query word: "<<str<<"  index: "<<index<<endl;
 	if (find == true)
 		return index;
 	else
@@ -47,7 +46,6 @@ int getIndex(string str)
 
 bool judge(string first, string second)
 {
-	//cout<<"first word: "<<first<<"  second word: "<<second;
 	bool oneletter = false;
 	int differentCount = 0;
 	int letterCount = first.length();
@@ -60,11 +58,10 @@ bool judge(string first, string second)
 	}
 	if (differentCount == 1)
 		oneletter = true;
-	//cout<<"  "<<oneletter<<endl;
 	return oneletter;
 }
 
-void function1(map* m)
+void function1(map* m, string sou, string tar)
 {
 	vector<string> flag;
 	vector<int> previous;
@@ -76,25 +73,10 @@ void function1(map* m)
 		previous[i] = -1;
 	}
 	map* ma = m;
-	string source;
-	string target;
-	cout<<"Please input one source word and one target word: "<<endl;
-	cin>>source;
-	cin>>target;
-	cout<<endl;
-	startIndex = getIndex(source);
-	endIndex = getIndex(target);
-	if ((startIndex == -1) || (endIndex == -1))
-	{
-		cout<<"Cannot convert"<<endl;
-		exit(0);
-	}
-		
-	cout<<"startIndex: "<<startIndex<<endl;
-	cout<<"endIndex: "<<endIndex<<endl;
+	string source = sou;
+	string target = tar;
 	flag[startIndex] = "T";
 	wordQueue.push(startIndex);
-	cout<<wordQueue.front();
 	while(!wordQueue.empty())
 	{
 		int index;
@@ -114,15 +96,9 @@ void function1(map* m)
 			r = r->next;
 		}
 	}
-	cout<<endl;
-	for (int i = 0; i < previous.size(); i++)
-	{
-		cout<<"index: "<<i<<"  "<<previous[i]<<endl;
-	}
 	vector<string> process;
 	bool sucess = false;
 	int parent;	
-	cout<<"the target word: "<<allWords[endIndex]<<" "<<endIndex<<endl;
 	process.push_back(allWords[endIndex]);
 	for (int i = 0; i < 6; i++)
 	{
@@ -146,12 +122,17 @@ void function1(map* m)
 	
 	if (sucess == true)
 	{
-		cout<<"yes"<<endl;
 		process.push_back(allWords[startIndex]);
+		cout<<"Convert Sucessfully"<<endl;
 		for (int i = process.size() -1; i >= 0; i--)
 		{
 			cout<<process[i]<<endl;
 		}
+		cout<<endl;
+	}
+	if (sucess == false)
+	{
+		cout<<"Cannot convert"<<endl;
 	}
 }
 
@@ -166,7 +147,6 @@ int main()
 	{
 		total++;
 	}
-	cout<<total<<endl;
 	map m(total);
 	inputFile.close();
 	inputFile.open("Program4AlternativeFall2013words.txt");
@@ -175,7 +155,6 @@ int main()
 		count++;
 		m.addWord(count, input);
 		allWords.push_back(input);
-		cout<<count<<"  words: "<<m.maps[count].getWord()<<"  |  "<<allWords[count]<<endl;
 	}
 	inputFile.close();
 	size = m.maps[0].getWord().size();
@@ -188,11 +167,6 @@ int main()
 				m.addWords(i, allWords[a]);
 			}
 		}
-	}
-	for (int i = 0; i < total; i++)
-	{
-		cout<<m.maps[i].getWord()<<" :  ";
-		m.maps[i].getList()->print();
 	}
 	
 	bool running = true;
@@ -209,7 +183,20 @@ int main()
 		{
 			case 1:
 			{
-				function1(&m);
+				string source;
+				string target;
+				cout<<"Please input one source word and one target word: "<<endl;
+				cin>>source;
+				cin>>target;
+				cout<<endl;
+				startIndex = getIndex(source);
+				endIndex = getIndex(target);
+				if ((startIndex == -1) || (endIndex == -1))
+				{
+					cout<<"Cannot convert"<<endl<<endl;
+				}
+				else
+					function1(&m, source, target);
 			}
 				break;
 			case 0:
