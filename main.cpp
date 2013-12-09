@@ -61,7 +61,7 @@ bool judge(string first, string second)
 	return oneletter;
 }
 
-void function1(map* m, string sou, string tar)
+void function1(map* m, string sou, string tar, int ste)
 {
 	vector<string> flag;
 	vector<int> previous;
@@ -75,6 +75,7 @@ void function1(map* m, string sou, string tar)
 	map* ma = m;
 	string source = sou;
 	string target = tar;
+	int count = ste;
 	flag[startIndex] = "T";
 	wordQueue.push(startIndex);
 	while(!wordQueue.empty())
@@ -100,7 +101,7 @@ void function1(map* m, string sou, string tar)
 	bool sucess = false;
 	int parent;	
 	process.push_back(allWords[endIndex]);
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < count; i++)
 	{
 		parent = previous[endIndex];
 		if (allWords[parent] != allWords[startIndex])
@@ -136,20 +137,20 @@ void function1(map* m, string sou, string tar)
 	}
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	ifstream inputFile;
 	
 	string input;
 	int count = -1;
-	inputFile.open("Program4AlternativeFall2013words.txt");
+	inputFile.open(argv[1]);
 	while(inputFile>>input)
 	{
 		total++;
 	}
 	map m(total);
 	inputFile.close();
-	inputFile.open("Program4AlternativeFall2013words.txt");
+	inputFile.open(argv[1]);
 	while(inputFile>>input)
 	{
 		count++;
@@ -185,9 +186,11 @@ int main()
 			{
 				string source;
 				string target;
-				cout<<"Please input one source word and one target word: "<<endl;
+				int steps;
+				cout<<"Please input one source word(string), one target word(string) and steps(int): "<<endl;
 				cin>>source;
 				cin>>target;
+				cin>>steps;
 				cout<<endl;
 				startIndex = getIndex(source);
 				endIndex = getIndex(target);
@@ -196,7 +199,7 @@ int main()
 					cout<<"Cannot convert"<<endl<<endl;
 				}
 				else
-					function1(&m, source, target);
+					function1(&m, source, target, steps);
 			}
 				break;
 			case 0:
