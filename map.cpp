@@ -1,0 +1,75 @@
+/*
+Author: Zhou Yuchao
+Date:12/08/2013
+Implmentation of the map
+*/
+
+#include <string>
+#include <iostream>
+#include <stdio.h>
+#include "map.h";
+
+using namespace std;
+
+//constructor
+map::map()
+{
+	mapSize = 0;
+	maps = NULL;
+}
+
+//constructor
+map::map(int size)
+{
+	mapSize = size;
+	maps = new wordArray[mapSize];
+}
+
+//destrcutor
+map::~map()
+{
+	delete[] maps;
+}
+
+//add destination in the map_array_cell
+void map::addWord(int number, string str)
+{
+	maps[number].setWord(str);	
+}
+
+//add vertex in the adjacent list in the corresponding map_array_cell
+void map::addWords(int number, string str)
+{
+	maps[number].setList(str);
+}
+
+//return the size of the map
+int map::getMapSize()
+{
+	return mapSize;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
